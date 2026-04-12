@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Assistant", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
+  
+  --color-flora-pink: #d94a8c;
+  --color-flora-pink-light: #fdf2f8;
+  --color-flora-green: #65a30d;
+  --color-flora-cream: #fdfbf7;
+  --color-flora-gold: #d4af37;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scrollbar-gutter: stable;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  background-image: url('/background.png');
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  color: #333;
+  font-family: var(--font-sans);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+}
+
+.glass-nav {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-drawer {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-footer {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.floral-bg {
+  /* Removed the inline SVG pattern as we are using the full background image */
+}
+
+.text-flora-pink {
+  color: var(--color-flora-pink);
+}
+
+.bg-flora-pink {
+  background-color: var(--color-flora-pink);
+}
+
+.text-flora-green {
+  color: var(--color-flora-green);
+}
+
+.bg-flora-green {
+  background-color: var(--color-flora-green);
+}
+
+.border-flora-pink {
+  border-color: var(--color-flora-pink);
+}
+
+.bg-flora-pink-light {
+  background-color: var(--color-flora-pink-light);
+}
