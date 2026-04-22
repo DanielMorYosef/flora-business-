@@ -1,8 +1,13 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { CheckCircle2, ArrowLeft, XCircle, Award, MessageCircle, ChevronLeft, ChevronRight, Gift, Menu, X, ChevronDown, Facebook, Instagram, Phone } from 'lucide-react';
-import { Countdown } from './components/Countdown';
+import { 
+  CheckCircle2, ArrowLeft, XCircle, Award, MessageCircle, 
+  ChevronLeft, ChevronRight, Gift, Menu, X, ChevronDown, 
+  Facebook, Instagram, Phone, Target, Calculator, 
+  Briefcase, Share2, Palette, Megaphone, MessageSquare, 
+  PlayCircle, Sparkles, Users, Fingerprint, UserCheck
+} from 'lucide-react';
 import { Typewriter } from './components/Typewriter';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 export default function App() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -10,6 +15,9 @@ export default function App() {
   const [openMistake, setOpenMistake] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -29,14 +37,15 @@ export default function App() {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch('https://hooks.zapier.com/hooks/catch/23724304/u7ey3ve/', {
+      const response = await fetch('/api/submit-lead', {
         method: 'POST',
-        mode: 'no-cors', // Zapier webhooks often work best with no-cors if not configured for CORS
         body: JSON.stringify(formData),
         headers: {
           'Content-Type': 'application/json'
         }
       });
+      
+      if (!response.ok) throw new Error('Submission failed');
       
       setIsSubmitted(true);
       console.log('Form submitted successfully');
@@ -62,7 +71,7 @@ export default function App() {
     { name: 'השיטה', id: 'transformation' },
     { name: 'עלינו', id: 'about' },
     { name: 'התכנית', id: 'program' },
-    { name: 'הצטרפות', id: 'pricing' },
+    { name: 'שיחת ייעוץ', id: 'lead-form' },
   ];
 
   const scrollToSection = (id: string) => {
@@ -85,11 +94,11 @@ export default function App() {
             exit={{ y: -100 }}
             className="fixed top-0 left-0 right-0 z-[100] glass-nav"
           >
-            <div className="max-w-4xl mx-auto py-3 px-4 md:px-6 flex justify-between items-center">
+            <div className="max-w-4xl mx-auto py-3 px-6 md:px-6 flex justify-between items-center">
               <img 
                 src="/logo.png" 
                 alt="FLORA Logo" 
-                className="h-8 md:h-12 object-contain cursor-pointer" 
+                className="h-8 md:h-12 object-contain cursor-pointer pr-2 md:pr-0" 
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               />
               
@@ -203,15 +212,15 @@ export default function App() {
               <span>יותר</span>
             </div>
           </div>
-          <p className="text-lg md:text-xl text-gray-700 px-4">בתהליך ממוקד של 60 יום</p>
+          <p className="text-lg md:text-xl text-gray-700 px-4">בתהליך ממוקד של 30 יום,<br/> חודש שיווק מתנה מאיתנו,<br/> <span className="text-flora-pink font-bold underline decoration-flora-pink/20 decoration-4 underline-offset-2">כולל תקציב לפרסום ממומן.</span></p>
         </section>
 
         {/* Section 2: Pain Points */}
         <section className="glass-card rounded-3xl p-4 md:p-12 mb-12 md:mb-16 relative w-full overflow-hidden">
           <div className="text-center space-y-4 md:space-y-6 text-base md:text-lg px-2">
             <p className="font-bold text-lg md:text-xl">אנחנו יודעים איפה את נמצאת כרגע.<br/>כי היינו שם.</p>
-            <p>למדת שזירה, עשית קורס, יש לך ידיים טובות ואפילו לימדו אותך<br/>בקורס דבר או שניים על עסקים.</p>
-            <p className="font-bold">אבל קשה לסגור אירועים, את לא בטוחה כמה לגבות,<br/>כל שיחה עם לקוחה קצת מלחיצה אותך,<br/>ומעל הכל את מרגישה שאת שווה הרבה יותר!</p>
+            <p>למדת שזירה, עשית קורס, יש לך ידיים טובות ואפילו לימדו אותך בקורס<br/>דבר או שניים על עסקים.</p>
+            <p className="font-bold">אבל קשה לסגור אירועים,<br/> את לא בטוחה כמה לגבות,<br/>כל שיחה עם לקוחה קצת מלחיצה אותך,<br/>ומעל הכל את מרגישה שאת שווה הרבה יותר!</p>
             <div className="pt-4 md:pt-6">
               <p className="text-lg md:text-xl">ואת באמת שווה יותר,</p>
               <h3 className="text-2xl md:text-3xl font-bold text-flora-green mt-2">רק חסרה לך שיטה !</h3>
@@ -224,21 +233,30 @@ export default function App() {
         <section id="transformation" className="text-center mb-12 md:mb-16 w-full overflow-hidden">
           <div className="px-4">
             <p className="text-lg md:text-xl mb-2">זה לא עוד קורס שזירה,</p>
-            <p className="text-lg md:text-xl mb-4">זה תהליך של 60 יום שבו אנחנו בונים איתך עסק.<br/>לא תחביב. לא "נראה מה יהיה".</p>
+            <p className="text-lg md:text-xl mb-4">זה תהליך של 30 יום שבו אנחנו בונים איתך עסק.<br/>לא תחביב. לא "נראה מה יהיה".</p>
             <h3 className="text-3xl md:text-4xl font-bold text-flora-pink mb-8 md:mb-10">עסק !</h3>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 w-full">
             {[
-              'מיקוד עסקי', 'מחשבון תמחור', 'כלים עסקיים',
-              'סושיאל', 'גרפיקות', 'שיווק דיגטלי',
-              'תסריטי שיחה', 'סימולציות', 'שימוש בכלי AI'
+              { label: 'מיקוד עסקי', icon: Target },
+              { label: 'מחשבון תמחור', icon: Calculator },
+              { label: 'כלים עסקיים', icon: Briefcase },
+              { label: 'סושיאל', icon: Share2 },
+              { label: 'גרפיקות', icon: Palette },
+              { label: 'שיווק דיגטלי', icon: Megaphone },
+              { label: 'תסריטי שיחה', icon: MessageSquare },
+              { label: 'סימולציות', icon: PlayCircle },
+              { label: 'שימוש בכלי AI', icon: Sparkles },
+              { label: 'ניהול לידים', icon: Users },
+              { label: 'מיתוג חכם', icon: Fingerprint },
+              { label: 'ליווי אישי', icon: UserCheck }
             ].map((item, i) => (
               <div key={i} className="glass-card rounded-2xl p-3 md:p-4 flex flex-col items-center justify-center gap-2 md:gap-3 overflow-hidden">
                 <div className="bg-green-100 text-flora-green rounded-full p-1.5 md:p-2">
-                  <CheckCircle2 size={18} md:size={24} />
+                  <item.icon className="w-4 h-4 md:w-6 md:h-6" />
                 </div>
-                <span className="font-semibold text-xs md:text-base text-gray-800 text-center">{item}</span>
+                <span className="font-semibold text-xs md:text-base text-gray-800 text-center">{item.label}</span>
               </div>
             ))}
           </div>
@@ -260,14 +278,36 @@ export default function App() {
 
           <p className="font-bold text-xl mb-8 px-2">אבל זה לא משנה כמה נכתוב ונספר, השוזורת שלנו יגידו לכן בעצמן</p>
           
-          <div className="relative w-full max-w-full md:max-w-md mx-auto mb-10 px-2">
-            <div className="aspect-[4/5] bg-gray-200 rounded-2xl overflow-hidden relative shadow-2xl">
-              <img src="https://picsum.photos/seed/florist/600/800" alt="Testimonial" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-              <div className="absolute inset-0 flex items-center justify-between px-4">
-                <button className="bg-flora-pink text-white rounded-full p-2 shadow-md"><ChevronRight size={20} md:size={24} /></button>
-                <button className="bg-flora-pink text-white rounded-full p-2 shadow-md"><ChevronLeft size={20} md:size={24} /></button>
-              </div>
+          <div className="relative w-full max-w-full md:max-w-md mx-auto mb-10 px-2 group">
+            <div className="aspect-[4/5] bg-black rounded-2xl overflow-hidden relative shadow-2xl border-4 border-white/20">
+              <video 
+                ref={videoRef}
+                className="w-full h-full object-contain"
+                controls
+                playsInline
+                preload="metadata"
+                poster="/video-poster.png"
+                onPlay={() => setIsVideoPlaying(true)}
+                onPause={() => setIsVideoPlaying(false)}
+                onEnded={() => setIsVideoPlaying(false)}
+              >
+                <source src="/testimonial.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+              
+              {/* Custom Play Overlay - only visible when not playing */}
+              {!isVideoPlaying && (
+                <div 
+                  className="absolute inset-0 flex items-center justify-center cursor-pointer group-hover:scale-110 transition-transform duration-500 bg-black/20"
+                  onClick={() => videoRef.current?.play()}
+                >
+                  <div className="w-20 h-20 bg-flora-pink/90 rounded-full flex items-center justify-center text-white shadow-xl backdrop-blur-sm border-2 border-white/30">
+                    <div className="ml-1 border-y-[12px] border-y-transparent border-l-[20px] border-l-white"></div>
+                  </div>
+                </div>
+              )}
             </div>
+            <p className="text-xs text-gray-500 mt-3 italic">לחצי על הנגן כדי לשמוע את הסיפור של נעמי</p>
           </div>
 
           <button 
@@ -275,15 +315,39 @@ export default function App() {
             className="w-full md:w-auto bg-flora-green hover:bg-green-600 text-white text-xl font-bold py-4 px-8 rounded-xl shadow-lg flex items-center justify-center gap-3 mx-auto transition-transform hover:scale-105"
           >
             <ArrowLeft size={24} />
-            <span>אני רוצה שתעזרו לי להפוך לעצמאית מרוויחה !</span>
+            <span>אני רוצה לבנות תכנית מותאמת אישית</span>
           </button>
 
           <div className="mt-16">
             <p className="font-bold text-lg mb-8">עסקים שליווינו אותם</p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="glass-card rounded-xl aspect-video flex items-center justify-center p-4">
-                  <img src={`https://picsum.photos/seed/logo${i}/200/100`} alt="Client Logo" className="max-h-full max-w-full opacity-70 grayscale hover:grayscale-0 transition-all" referrerPolicy="no-referrer" />
+              {[
+                { name: 'Client 1', logo: '/logo1.png' },
+                { name: 'Client 2', logo: '/logo2.png' },
+                { name: 'Client 3', logo: '/logo3.png' },
+                { name: 'Client 4', logo: '/logo4.png' }
+              ].map((client, i) => (
+                <div key={i} className="bg-white/10 backdrop-blur-xl rounded-3xl aspect-square flex items-center justify-center p-4 shadow-2xl border border-white/30 relative overflow-hidden group">
+                  <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent pointer-events-none" />
+                  {/* Fallback to a styled text if logo doesn't exist yet, otherwise show logo */}
+                  <img 
+                    src={client.logo} 
+                    alt={client.name} 
+                    className="w-[92%] h-[92%] object-contain relative z-10" 
+                    onError={(e) => {
+                      // If image fails to load (because it's not uploaded yet), show a nice placeholder
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      const parent = target.parentElement;
+                      if (parent && !parent.querySelector('.placeholder-text')) {
+                        const span = document.createElement('span');
+                        span.className = 'placeholder-text text-gray-400 font-bold text-sm opacity-50';
+                        span.innerText = 'LOGO';
+                        parent.appendChild(span);
+                      }
+                    }}
+                    referrerPolicy="no-referrer" 
+                  />
                 </div>
               ))}
             </div>
@@ -333,7 +397,7 @@ export default function App() {
               className="w-full md:w-auto bg-flora-green hover:bg-green-600 text-white text-lg md:text-xl font-bold py-4 px-8 rounded-xl shadow-lg flex items-center justify-center gap-3 mx-auto transition-transform hover:scale-105"
             >
               <ArrowLeft size={20} md:size={24} />
-              <span>סיקרנתם ! אני רוצה שתחזרו אליי לעוד פרטים</span>
+              <span>בואו נבנה לי מסלול ממתחילה למקצוענית</span>
             </button>
           </div>
         </section>
@@ -346,19 +410,20 @@ export default function App() {
           
           <div className="text-center space-y-4 text-sm md:text-lg mb-10 px-4">
             <p>זה לא עוד קורס שזירה. זה לא עוד השראה לאינסטגרם.<br/>וזה בטח לא "תנסי ותראי מה יהיה".</p>
-            <p className="font-bold text-base md:text-xl">זה מסלול של 60 יום שמלמד אותך איך להיות שוזרת שמרוויחה כסף!</p>
+            <p className="font-bold text-base md:text-xl">זה מסלול של 30 יום שמלמד אותך איך להיות שוזרת שמרוויחה כסף!</p>
             <p>לא רק שוזרת מוכשרת. שוזרת עם עסק !</p>
           </div>
 
           <div className="space-y-4 w-full">
             {[
-              { title: 'ליווי צמוד לאורך 60 יום וגם אחריהם', desc: 'נלווה אותך יד ביד, עם זמינות מלאה בכל שלב, שיחות זום שבועיות ומעקב אחרי ההתקדמות שלך.' },
+              { title: 'ליווי צמוד לאורך 30 יום וגם אחריהם', desc: 'נלווה אותך יד ביד, עם זמינות מלאה בכל שלב, שיחות זום שבועיות ומעקב אחרי ההתקדמות שלך.' },
               { title: 'מיקוד עסקי', desc: 'נברר יחד מה החוזקות ומה החולשות שלך, נבין איפה כדאי לך להתמקד ונבנה יחד תכנית לשבועות הבאים' },
-              { title: 'סקר שוק', desc: 'נבדוק כמה מציעים בשוק ותקבלי בהירות לגבי המחירים ששוזורת אחרות נותנות' },
+              { title: 'כניסה לקהילה הסגורה של המלוות שלנו', desc: 'גישה בלעדית לקבוצה סגורה של שוזרות מצליחות, בונוסים מיוחדים, מענה לשאלות ורשת תמיכה שתלווה אותך בדרך למעלה.' },
               { title: 'הקמת מנהל מודעות', desc: 'כלי שיווקי שאיתו נפרסם ודרכו נייצר לידים חמים ואיכותיים' },
+              { title: 'התחייבות ל-30 לידים בחודש השיווק מתנה', desc: 'אנחנו לא רק מבטיחים, אנחנו מקיימים. התחייבות חוזית ל-30 פניות מלקוחות פוטנציאליים (לידים) במהלך חודש השיווק שאת מקבלת במתנה.' },
               { title: 'כלים עסקיים', desc: 'תקבלי מאיתנו מגוון כלים עסקיים שאיתם תעבדי באופן שוטף : מחשבון תמחור, הוצאות הכנסות, רווח והפסד, טבלאות לידים וכו\'' },
               { title: 'הצעות מחיר בקלילות', desc: 'נלמד איך לתת הצעת מחיר במהירות, ובלי להתנצל !' },
-              { title: 'הדרכה עם ממוחי מכירות', desc: 'לאחר שנבנה מודל לתסריט מכירה, את תפגשי בזום אחד על אחד עם איש צוות שלנו שילמד אותך את סודות המכירה ואיך לטפל בהתנגדויות' },
+              { title: 'הדרכה עם מומחי מכירות', desc: 'לאחר שנבנה מודל לתסריט מכירה, את תפגשי בזום אחד על אחד עם איש צוות שלנו שילמד אותך את סודות המכירה ואיך לטפל בהתנגדויות' },
               { title: 'הדרכת סושיאל', desc: 'תלמדי איך לצלם את העבודות שלך בצורה שמשקפת את הכישרון שלך, ואיך לתפעל את הרשתות בצורה שתוציא אותך ואת הכישרון שלך החוצה' },
               { title: 'שיפוץ רשתות חברתיות', desc: 'לוגו, באנרים, סרטונים, וכל הגרפיקות שתצטרכי כדי להתחיל לעבוד כמו מקצוענית' },
               { title: 'סימולציות', desc: 'כדי להבטיח סגירות אירועים אנחנו נעשה סימולציות שדרכם נדע איך להוציא ממך את אשת המכירות שבך!' }
@@ -376,7 +441,7 @@ export default function App() {
           </div>
 
           <div className="mt-12 text-center px-4">
-            <p className="text-lg md:text-xl font-bold mb-6">כל זה ועוד - בחודש אחד בלבד ולאחר מכן-</p>
+            <p className="text-lg md:text-xl font-bold mb-6">כל זה ועוד - בחודש אחד בלבד.<br/> לאחר מכן-</p>
             <div className="glass-card border-2 border-flora-pink rounded-2xl p-5 md:p-6 relative inline-block max-w-full">
               <Gift className="absolute -top-4 -right-4 md:-top-6 md:-right-6 text-flora-green" size={32} md:size={48} />
               <Gift className="absolute -bottom-4 -left-4 md:-bottom-6 md:-left-6 text-flora-green" size={32} md:size={48} />
@@ -450,69 +515,7 @@ export default function App() {
               className="w-full md:w-auto bg-flora-green hover:bg-green-600 text-white text-lg md:text-xl font-bold py-4 px-8 rounded-xl shadow-lg flex items-center justify-center gap-3 mx-auto transition-transform hover:scale-105"
             >
               <ArrowLeft size={20} md:size={24} />
-              <span>אני רוצה לעבוד נכון יותר</span>
-            </button>
-          </div>
-        </section>
-
-        {/* Section 8: Guarantee */}
-        <section className="mb-12 md:mb-16 w-full">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl md:text-4xl font-bold text-flora-green px-4">ההתחייבות האישית שלנו אליכן.</h2>
-          </div>
-
-          <div className="glass-card rounded-3xl p-4 md:p-12 pb-16 md:pb-12 text-center space-y-4 md:space-y-6 text-sm md:text-lg mx-auto w-full overflow-hidden">
-            <p className="px-2">בתור משווקים שבנו עסק פעיל בעיצוב פרחים לאירועים, עשינו לא<br/>מעט טעויות בתחילת הדרך.<br/>תמחור מהבטן, עבודה קשה בלי רווח אמיתי, ושיווק שלא מביא<br/>פניות.</p>
-            <p className="px-2">בדרך פגשנו שוזרות מוכשרות שלומדות עוד קורסים,<br/>משקיעות בציוד ובעיצובים -<br/><strong>אבל נשארות בלי כלים פרקטיים לבנות עסק שמכניס כסף.</strong></p>
-            <p className="px-2">את הליווי הזה בנינו כדי להיות בדיוק ההפך מזה.<br/>יצרנו תהליך ברור לתמחור, שיווק וסגירת אירועים -<br/><strong>השיטה שאנחנו היינו צריכים בתחילת הדרך.</strong></p>
-            
-            <div className="py-2 md:py-4">
-              <p className="font-bold">איך זה עובד?</p>
-              <p className="px-2">את נכנסת לליווי, מיישמת את השלבים בעסק שלך ופועלת בצורה<br/>מסודרת מול לקוחות.</p>
-            </div>
-
-            <p className="px-2">המטרה היא שבתוך חודשיים כבר תסגרי את האירוע הראשון שלך -<br/>אירוע שמחזיר את עלות הליווי ונותן לך ביטחון להמשיך קדימה.</p>
-            
-            <p className="font-bold px-2">התהליך דורש עשייה ומחויבות,<br/>אבל כשיש שיטה - יש גם תוצאה.</p>
-            
-            <h3 className="text-xl md:text-2xl font-bold text-gray-900 pt-4 px-2">הליווי יימשך עד שתסגרי אירוע<br/>לפחות בשווי הליווי.</h3>
-          </div>
-
-          <div className="flex justify-center -mt-10 md:-mt-12 relative z-10">
-            <div className="bg-gradient-to-b from-yellow-300 to-yellow-500 rounded-full p-1 shadow-xl scale-90 md:scale-100">
-              <div className="bg-white rounded-full w-28 h-28 md:w-32 md:h-32 flex flex-col items-center justify-center border-4 border-yellow-400 text-center p-2">
-                <Award className="text-yellow-500 mb-1" size={28} md:size={32} />
-                <span className="font-bold text-xs md:text-sm leading-tight text-yellow-700">ליווי ללא<br/>הגבלת זמן</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Section 9: Pricing & CTA */}
-        <section id="pricing" className="text-center w-full overflow-hidden pb-12">
-          <h2 className="text-2xl md:text-4xl font-bold text-flora-green mb-2 px-4">זה הרגע להכנס לליווי</h2>
-          <h2 className="text-2xl md:text-4xl font-bold text-flora-pink mb-8 px-4">בתנאי ההצטרפות הנוכחים</h2>
-
-          <div className="space-y-4 text-sm md:text-lg mb-6 px-4">
-            <p>הליווי הזה הוא לא רק עוד תהליך מקצועי.<br/>את לא קונה כאן רק ידע או משימות - <strong>את קונה מנטורים לדרך.</strong></p>
-            <p>מישהו שילך איתך יד ביד בהחלטות, בביטחון, ובקפיצה המנטלית<br/>משוזרת שעובדת מהלב - לבעלת עסק שחושבת, מתמחרת ופועלת<br/>כמו בעלת מקצוע אמיתית.</p>
-          </div>
-
-          <div className="mb-6 flex justify-center w-full overflow-x-auto no-scrollbar">
-            <Countdown />
-          </div>
-
-          <div className="glass-card rounded-3xl p-5 md:p-8 max-w-2xl mx-auto w-full overflow-hidden">
-            <p className="text-[11px] md:text-lg font-semibold mb-6 px-2">ליווי | בונוסים | כניסה לקהילה | עדכונים | הבטחה להצלחה</p>
-            <div className="flex justify-center items-center gap-2 mb-8">
-              <span className="text-4xl md:text-6xl font-bold text-flora-green">12,980</span>
-              <span className="text-2xl md:text-4xl font-bold text-flora-green">₪</span>
-            </div>
-            <button 
-              onClick={scrollToForm}
-              className="w-full bg-flora-green hover:bg-green-600 text-white text-lg md:text-2xl font-bold py-4 md:py-5 px-6 md:px-8 rounded-xl shadow-lg flex items-center justify-center gap-3 transition-transform hover:scale-105"
-            >
-              <span>השאירו פרטים להצטרפות</span>
+              <span>אני רוצה לתאם שיחת ייעוץ</span>
             </button>
           </div>
         </section>
@@ -529,8 +532,11 @@ export default function App() {
                 transition={{ duration: 0.5 }}
               >
                 <div className="text-center mb-10">
-                  <h2 className="text-3xl md:text-5xl font-bold text-flora-green mb-4">בואי נתחיל את הדרך שלך</h2>
-                  <p className="text-lg md:text-xl text-gray-700">השאירי פרטים ונחזור אלייך לשיחת התאמה</p>
+                  <h2 className="text-3xl md:text-5xl font-bold text-flora-green mb-4">בואי נבנה לך מסלול אישי</h2>
+                  <p className="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto">
+                    השאירי פרטים לתיאום שיחת ייעוץ (ללא התחייבות!) עם היועצת העסקית שלנו. 
+                    יחד נבין מה העסק שלך באמת צריך ונבנה לך תכנית 30 יום מותאמת אישית שבסופה תקבלי חודש שיווק מתנה עם התחייבות ללפחות 30 לידים!!
+                  </p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="glass-card rounded-3xl p-6 md:p-10 space-y-6">
@@ -701,7 +707,7 @@ export default function App() {
           {/* Quick Links */}
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-3 mb-8 text-[13px] font-bold text-gray-500">
             <button onClick={() => scrollToSection('hero')} className="hover:text-flora-green transition-colors">השיטה</button>
-            <button onClick={() => scrollToSection('pricing')} className="hover:text-flora-green transition-colors">הצטרפות</button>
+            <button onClick={() => scrollToSection('lead-form')} className="hover:text-flora-green transition-colors">שיחת ייעוץ</button>
             <button onClick={scrollToForm} className="hover:text-flora-green transition-colors">צור קשר</button>
           </div>
 
@@ -721,7 +727,7 @@ export default function App() {
         className="bg-flora-green hover:bg-green-600 text-white rounded-full py-3 px-6 font-bold shadow-lg flex items-center gap-2 transition-transform hover:scale-105"
       >
         <MessageCircle size={20} />
-        <span>השאירו פרטים</span>
+        <span>שיחת ייעוץ חינם</span>
       </button>
     </div>
     </>
