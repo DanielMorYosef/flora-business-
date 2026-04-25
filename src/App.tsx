@@ -95,9 +95,9 @@ export default function App() {
             className="fixed top-0 left-0 right-0 z-[100] glass-nav"
           >
             <div className="max-w-4xl mx-auto py-3 px-6 md:px-6 flex justify-between items-center">
-              <img 
+                <img 
                 src="/logo.png" 
-                alt="FLORA Logo" 
+                alt="FLORA" 
                 className="h-8 md:h-12 object-contain cursor-pointer pr-2 md:pr-0" 
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               />
@@ -117,6 +117,7 @@ export default function App() {
                 <button 
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
                   className="text-gray-800 p-1 md:hidden"
+                  aria-label={isMenuOpen ? "סגור תפריט" : "פתח תפריט"}
                 >
                   {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
                 </button>
@@ -300,6 +301,8 @@ export default function App() {
                 <div 
                   className="absolute inset-0 flex items-center justify-center cursor-pointer group-hover:scale-110 transition-transform duration-500 bg-black/20"
                   onClick={() => videoRef.current?.play()}
+                  role="button"
+                  aria-label="נגן סרטון עדות"
                 >
                   <div className="w-20 h-20 bg-flora-pink/90 rounded-full flex items-center justify-center text-white shadow-xl backdrop-blur-sm border-2 border-white/30">
                     <div className="ml-1 border-y-[12px] border-y-transparent border-l-[20px] border-l-white"></div>
@@ -441,7 +444,7 @@ export default function App() {
           </div>
 
           <div className="mt-12 text-center px-4">
-            <p className="text-lg md:text-xl font-bold mb-6">כל זה ועוד - בחודש אחד בלבד.<br/> לאחר מכן-</p>
+            <p className="text-lg md:text-xl font-bold mb-6">כל זה ועוד - בחודש בלבד.<br/> לאחר מכן-</p>
             <div className="glass-card border-2 border-flora-pink rounded-2xl p-5 md:p-6 relative inline-block max-w-full">
               <Gift className="absolute -top-4 -right-4 md:-top-6 md:-right-6 text-flora-green" size={32} md:size={48} />
               <Gift className="absolute -bottom-4 -left-4 md:-bottom-6 md:-left-6 text-flora-green" size={32} md:size={48} />
@@ -541,8 +544,9 @@ export default function App() {
 
                 <form onSubmit={handleSubmit} className="glass-card rounded-3xl p-6 md:p-10 space-y-6">
                   <div className="space-y-2">
-                    <label className="block text-sm font-bold text-gray-700 mr-1">שם מלא</label>
+                    <label htmlFor="name" className="block text-sm font-bold text-gray-700 mr-1">שם מלא</label>
                     <input 
+                      id="name"
                       required
                       type="text" 
                       placeholder="הכניסי את שמך"
@@ -554,8 +558,9 @@ export default function App() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="block text-sm font-bold text-gray-700 mr-1">מספר טלפון</label>
+                    <label htmlFor="phone" className="block text-sm font-bold text-gray-700 mr-1">מספר טלפון</label>
                     <input 
+                      id="phone"
                       required
                       type="tel" 
                       placeholder="05X-XXXXXXX"
@@ -568,9 +573,10 @@ export default function App() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="block text-sm font-bold text-gray-700 mr-1">מה רמת הניסיון שלך?</label>
+                    <label htmlFor="experience" className="block text-sm font-bold text-gray-700 mr-1">מה רמת הניסיון שלך?</label>
                     <div className="relative">
                       <select 
+                        id="experience"
                         required
                         className="w-full bg-white/50 border border-green-100 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-flora-green/50 transition-all appearance-none"
                         value={formData.experience}
@@ -589,8 +595,9 @@ export default function App() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="block text-sm font-bold text-gray-700 mr-1">ספרי לנו קצת עלייך ועל העסק</label>
+                    <label htmlFor="moreInfo" className="block text-sm font-bold text-gray-700 mr-1">ספרי לנו קצת עלייך ועל העסק</label>
                     <textarea 
+                      id="moreInfo"
                       rows={4}
                       placeholder="מה האתגר הכי גדול שלך כרגע?"
                       className="w-full bg-white/50 border border-green-100 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-flora-green/50 transition-all"
@@ -657,35 +664,38 @@ export default function App() {
 
           {/* Social Links */}
           <div className="flex gap-4 mb-6">
-            <a 
-              href="https://wa.link/1ot33r" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center hover:scale-110 transition-transform shadow-md"
-              title="WhatsApp"
-            >
-              <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-              </svg>
-            </a>
-            <a 
-              href="https://www.facebook.com/profile.php?id=61588018935973#" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center hover:scale-110 transition-transform shadow-md"
-              title="Facebook"
-            >
-              <Facebook size={20} />
-            </a>
-            <a 
-              href="https://www.instagram.com/flora_biz_grow/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 text-white flex items-center justify-center hover:scale-110 transition-transform shadow-md"
-              title="Instagram"
-            >
-              <Instagram size={20} />
-            </a>
+              <a 
+                href="https://wa.link/1ot33r" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center hover:scale-110 transition-transform shadow-md"
+                title="WhatsApp"
+                aria-label="שלח הודעת וואטסאפ"
+              >
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                </svg>
+              </a>
+              <a 
+                href="https://www.facebook.com/profile.php?id=61588018935973#" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center hover:scale-110 transition-transform shadow-md"
+                title="Facebook"
+                aria-label="עקבו אחרינו בפייסבוק"
+              >
+                <Facebook size={20} />
+              </a>
+              <a 
+                href="https://www.instagram.com/flora_biz_grow/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 text-white flex items-center justify-center hover:scale-110 transition-transform shadow-md"
+                title="Instagram"
+                aria-label="עקבו אחרינו באינסטגרם"
+              >
+                <Instagram size={20} />
+              </a>
           </div>
 
           {/* Contact Info */}
@@ -725,6 +735,7 @@ export default function App() {
       <button 
         onClick={scrollToForm}
         className="bg-flora-green hover:bg-green-600 text-white rounded-full py-3 px-6 font-bold shadow-lg flex items-center gap-2 transition-transform hover:scale-105"
+        aria-label="תיאום שיחת ייעוץ חינם"
       >
         <MessageCircle size={20} />
         <span>שיחת ייעוץ חינם</span>
