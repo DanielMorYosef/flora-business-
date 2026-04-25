@@ -213,7 +213,7 @@ export default function App() {
               <span>יותר</span>
             </div>
           </div>
-          <p className="text-lg md:text-xl text-gray-700 px-4">בתהליך ממוקד של 30 יום,<br/> חודש שיווק מתנה מאיתנו,<br/> <span className="text-flora-pink font-bold underline decoration-flora-pink/20 decoration-4 underline-offset-2">כולל תקציב לפרסום ממומן.</span></p>
+          <p className="text-lg md:text-xl text-gray-700 px-4">בתהליך ממוקד של 30 יום,<br/> פלוס חודש שיווק מתנה מאיתנו,<br/> <span className="text-flora-pink font-bold underline decoration-flora-pink/20 decoration-4 underline-offset-2">כולל תקציב לפרסום ממומן.</span></p>
         </section>
 
         {/* Section 2: Pain Points */}
