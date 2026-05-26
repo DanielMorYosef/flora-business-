@@ -29,12 +29,19 @@ html, body {
 }
 
 body {
-  background-image: url('/background.png');
-  background-attachment: fixed;
-  background-size: cover;
-  background-position: center;
   color: #333;
   font-family: var(--font-sans);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url('/background.png');
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .glass-card {
